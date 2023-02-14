@@ -3,23 +3,34 @@ import java.util.Scanner;
 
 public class Main {
 
+    static int dp[];
+    static int stair[];
+    static int sum(int n){
+        if(dp[n]==-1){
+            dp[n]=Math.max(sum(n-2),sum(n-3)+stair[n-1])+stair[n];
+        }
+        return dp[n];
+    }
     public static void main(String[] args) throws IOException {
         Scanner sc = new Scanner(System.in);
         int n = sc.nextInt();
-        int stair[]=new int[n];
-        for(int i=0; i<n; i++){
+        stair=new int[n+1];
+        for(int i=1; i<n+1; i++){
             stair[i]=sc.nextInt();
         }
 
-        int dp[]=new int[n];
+        dp=new int[n+1];
+        for(int i=0; i<n+1; i++)
+            dp[i]=-1;
+
         dp[0]=0;
-        dp[1]=stair[0];
-        dp[2]=stair[1];
-        for(int i=3; i<n; i++){
-            dp[i]= Math.max(dp[i-2],dp[i-3]+stair[i-1])+stair[i];
+        dp[1]=stair[1];
+        if(n==1){
+            System.out.println(dp[n]);
+            return;
         }
+        dp[2]=stair[1]+stair[2];
 
-        System.out.println(dp[n-1]);
-
+        System.out.println(sum(n));
     }
 }
