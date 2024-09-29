@@ -68,3 +68,37 @@ class Solution {
         
     }
 }
+
+/**
+dfs를 사용하지 않는 정석 답 
+*/
+import java.util.*;
+
+class Solution {
+    static int[] indegree = new int[1000000];  
+    static int[] outdegree = new int[1000000];  
+    static int[] ans = new int[4];
+    
+    public int[] solution(int[][] edges) {
+        for(int i=0; i<edges.length; i++){
+            int v = edges[i][0]-1; // v -> w
+            int w = edges[i][1]-1; 
+            indegree[w]++; // 진입 차수 증가
+            outdegree[v]++; // 진출 차수 증가
+            if(outdegree[v]>=2 && indegree[v]==0){
+                ans[0]=v+1; // 생성 정점 확인
+            }
+        }
+
+        for(int i=0; i<1000000; i++){
+            if(outdegree[i]==0&&indegree[i]>=1)// 막대모형 끝
+                    ans[2]++;
+            else if(indegree[i]>=2 && outdegree[i]==2) // 8자 모형
+                ans[3]++;
+        }
+        
+        ans[1] = outdegree[ans[0]-1]-(ans[2]+ans[3]); // 생성 정점의 진출 차수에서 막대 + 8자 수를 뺀 값 = 도넛 
+        return ans; 
+        
+    }
+}
