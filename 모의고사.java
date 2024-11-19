@@ -1,4 +1,5 @@
 import java.util.*;
+import java.util.stream.IntStream;
 /**
 i=0~
 1번 : i % 5 + 1
@@ -7,26 +8,20 @@ i=0~
 */
 class Solution {
     public int[] solution(int[] answers) {
-        int sec[] = {2,1,2,3,2,4,2,5};
-        int third[] = {3,3,1,1,2,2,4,4,5,5};
+        int[][] rules = {{1,2,3,4,5},
+                         {2,1,2,3,2,4,2,5},
+                         {3,3,1,1,2,2,4,4,5,5}};
         
-        int result[] = new int[3];
+        int[] cnt = new int[3];
+        int max = 0;
         for(int i=0; i<answers.length; i++){
-            if(i % 5 + 1 == answers[i]) result[0]++;
-            if(sec[i % 8] == answers[i]) result[1]++;
-            if(third[i % 10] == answers[i]) result[2]++;
+            for(int j=0; j<3; j++){
+                if(rules[j][i%rules[j].length] == answers[i])
+                    max = Math.max(max,++cnt[j]);
+            }
         }
-        
-        int max = Arrays.stream(result).max().orElse(0);
-        List<Integer> list = new ArrayList<>();
-        for(int i=0; i<3; i++){
-            if(result[i]==max) list.add(i+1);
-        }
-        
-        int answer[] = new int[list.size()];
-        for(int i=0; i<list.size(); i++)
-            answer[i] = list.get(i);
-        
-        return answer;
+        final int maxValue = max;
+        return IntStream.range(0,3).filter(i -> cnt[i] == maxValue)
+            .map(i -> i + 1).toArray();
     }
 }
