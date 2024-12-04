@@ -1,0 +1,13 @@
+import java.util.*;
+
+class Solution {
+    public int solution(String before, String after) {
+        char[] beforeStr = before.toCharArray();
+        char[] afterStr = after.toCharArray();
+        Arrays.sort(beforeStr);
+        Arrays.sort(afterStr);
+        String past = String.valueOf(beforeStr);
+        String next = String.valueOf(afterStr);
+        return past.equals(next) ? 1 : 0;
+    }
+}
