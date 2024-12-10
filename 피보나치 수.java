@@ -1,3 +1,7 @@
+/**
+ * 연산의 오류를 방지하기 위해 중간에 나머지 연산을 계속 해서 저장하는 방식
+ * (a + b) % T == (a % T + b % T)
+ */
 class Solution {
     public int solution(int n) {
         int mem[] = new int[n+1];
