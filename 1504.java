@@ -12,9 +12,10 @@ class Node{
 
 public class Main{
     static List<Node>[] graph;
-    static int dijkstra(int n, int start, int target){
+    static final int INF = 200000000;
+    static int[] dijkstra(int n, int start){
         int dist[] = new int[n+1];
-        Arrays.fill(dist, Integer.MAX_VALUE);
+        Arrays.fill(dist, INF);
         dist[start] = 0;
 
         PriorityQueue<Node> pq = new PriorityQueue<>((n1, n2) -> n1.cost - n2.cost);
@@ -23,6 +24,8 @@ public class Main{
         while(!pq.isEmpty()){
             Node node = pq.poll();
 
+            if(node.cost > dist[node.v]) continue;
+            
             for(Node next : graph[node.v]){
                 if(dist[next.v] > dist[node.v] + next.cost){
                     dist[next.v] = dist[node.v] + next.cost;
@@ -32,23 +35,7 @@ public class Main{
             }
         }
 
-        return dist[target];
-    }
-
-    static int count(int n, int a, int b){
-        // 1 -> a, a -> b, b -> N 최소 거리의 합
-        int start = dijkstra(n, 1, a);
-        int mid = dijkstra(n, a, b);
-        int end = dijkstra(n, b, n);
-        int result;
-        if(start == Integer.MAX_VALUE || mid == Integer.MAX_VALUE || end == Integer.MAX_VALUE){
-            result = Integer.MAX_VALUE;
-        }
-        else{
-            result = start + mid + end;
-        }
-
-        return result;
+        return dist;
     }
 
     public static void main(String[] args) throws Exception{
@@ -75,13 +62,18 @@ public class Main{
         int v1 = Integer.parseInt(st.nextToken());
         int v2 = Integer.parseInt(st.nextToken());
 
+        int[] dist = dijkstra(n, 1);
+        int[] distV1 = dijkstra(n, v1);
+        int[] distV2 = dijkstra(n, v2);
         // 1 -> v1, v1 -> v2, v2 -> N 최소 거리의 합
-        int result1 = count(n, v1, v2);
+        int result1 = dist[v1] + distV1[v2] + distV2[n];
+
         // 1 -> v2, v2 -> v1, v1 -> N 최소 거리의 합
-        int result2 = count(n, v2, v1);
+        int result2 = dist[v2] + distV2[v1] + distV1[n];
+
         int answer = Math.min(result1, result2);
 
-        System.out.println(answer == Integer.MAX_VALUE ? -1 : answer);
+        System.out.println(answer >= INF ? -1 : answer);
     }
 }
 
